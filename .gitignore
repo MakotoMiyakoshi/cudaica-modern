@@ -81,3 +81,11 @@ config.*
 cudaica
 src/.deps
 src/.dirstamp
+
+# Local regression outputs and private configuration
+/tests/output/
+*.local.cfg
+.env
+.env.*
+*.pem
+*.key

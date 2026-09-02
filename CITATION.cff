@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "Please cite the original CUDAICA paper when using this software."
+title: "CUDAICA modernized"
+version: 0.1.0
+date-released: 2026-09-02
+license: GPL-3.0-or-later
+repository-code: "https://github.com/MakotoMiyakoshi/cudaica-modern"
+authors:
+  - family-names: Miyakoshi
+    given-names: Makoto
+preferred-citation:
+  type: article
+  title: "CUDAICA: GPU Optimization of Infomax-ICA EEG Analysis"
+  authors:
+    - family-names: Raimondo
+      given-names: Federico
+    - family-names: Kamienkowski
+      given-names: Juan E.
+    - family-names: Sigman
+      given-names: Mariano
+    - family-names: Fernandez Slezak
+      given-names: Diego
+  journal: "Computational Intelligence and Neuroscience"
+  year: 2012
+  doi: "10.1155/2012/206972"

@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.68])
-AC_INIT([cudaica], [2.0], [fraimondo@dc.uba.ar])
-AM_INIT_AUTOMAKE([cudaica], [2.0])
+AC_INIT([cudaica], [0.1.0], [fraimondo@dc.uba.ar])
+AM_INIT_AUTOMAKE([cudaica], [0.1.0])
 AC_CONFIG_SRCDIR([cudaica.c])
 #~ AC_CONFIG_HEADERS([includes/config.h])
 m4_include([m4/m4_ax_blas.m4])
