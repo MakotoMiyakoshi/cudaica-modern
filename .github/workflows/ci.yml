@@ -1,0 +1,39 @@
+name: source release checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  source-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify regression fixture
+        run: python3 tests/run_regression.py --verify-fixture-only
+      - name: Check launcher syntax
+        run: sh -n scripts/run_cudaica_mkl.sh
+      - name: Reject compiled release artifacts
+        run: |
+          if find . -path ./.git -prune -o -type f \( -name '*.so' -o -name '*.a' -o -name '*.o' -o -name '*.dll' -o -name '*.exe' -o -name '*.cubin' -o -name '*.ptx' \) -print | grep -q .; then
+            echo 'Compiled artifact found in source release' >&2
+            exit 1
+          fi
+
+  cuda-build:
+    runs-on: ubuntu-latest
+    container: nvidia/cuda:11.8.0-devel-ubuntu20.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Linux build dependencies
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            autoconf automake build-essential gfortran libblas-dev liblapack-dev
+      - name: Configure and build for sm_80
+        run: |
+          ./reconf.sh
+          ./configure --with-cuda=/usr/local/cuda --with-cuda-arch=80
+          make -j2
+      - name: Confirm executable was built
+        run: test -x ./cudaica
