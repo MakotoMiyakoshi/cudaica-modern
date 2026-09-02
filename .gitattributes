@@ -7,3 +7,7 @@
 *.md text eol=lf
 *.cff text eol=lf
 *.fdt binary
+
+# Preserve these upstream CRLF blobs exactly; normalization dirties Windows clones.
+python/bindings.c -text
+python/setup.py -text
