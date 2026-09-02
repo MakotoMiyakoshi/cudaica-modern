@@ -154,10 +154,11 @@ void varsort(real *data, real *weights, real *sphere, real *eigv, real *bias, in
 	for (i=0 ; i<m*k ; i++) winv[i] = winv[i]*winv[i];
 
 	for (i=0,ik=0 ; i<m ; i++,ik+=k) {
+		real backproj_power = 0.0;
+		for (l=0 ; l<k ; l++) backproj_power += winv[l+ik];
 		for (j=0,jm=0 ; j<n ; j++,jm+=m) {
-			sum[j] = 0;
 			act = data[i+jm]*data[i+jm];
-			for(l=0 ; l<k ; l++) sum[j] += act*winv[l+ik];
+			sum[j] = act*backproj_power;
 		}
 
 		meanvar[i].idx = i;

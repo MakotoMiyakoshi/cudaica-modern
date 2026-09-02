@@ -104,43 +104,62 @@ natural getMaxBlocks() {
 }
 
 /*
- * Gets real free mem by trying to malloc.
- * TODO: This is really bad, it doesn't work all the time and it needs an amount of elements by column
- * 
- */
-void recalcFreeMem(size_t elemspercolumn) {
-	size_t mfree;
-	size_t step;
-	size_t total;
-	HANDLE_ERROR(cudaMemGetInfo(&mfree, &total));
-	DPRINTF(1, "Informed free memory %lu - total %lu\n", mfree, total);
-	void* ptr;
-	step = mfree/2;
 
-	size_t ncols = elemspercolumn;
-	size_t nrows = (mfree/sizeof(real))/ncols;
-	step = nrows /2;
-	size_t pitch;
-	while (step > MAX_MEM_THRESHOLD) {
-		DPRINTF(2,"Trying with %lu rows and %lu cols ", nrows, ncols);
-		if (cudaMallocPitch(&ptr, &pitch, ncols*sizeof(real), nrows) != cudaSuccess) {
-			DPRINTF(2, "FAILED!\n");
-			nrows -= step;
-		} else {
-			DPRINTF(2, "OK!\n");
-			nrows += step;
-			cudaFree(ptr);
-		}
-		step /= 2;
-	}
-	nrows -= step*2;
-	mfree = ncols * sizeof(real) * nrows;
-	DPRINTF(1,"Max linear free mem = %lu (%lu, %lu)\n", mfree, nrows, ncols);
-	fprintf(stdout,"Max linear free mem = %lu bytes (aprox %lu samples, %lu channels)\n", mfree, nrows, ncols);
-	gpu.currentFreeMem = mfree;
-	gpu.neededReservedMem = RESERVED_MEM_BYTES;
-	ResetError();
+ * Recalculate available GPU memory.
+
+ *
+
+ * cudaMemGetInfo() already reports the currently available device memory.
+
+ * The legacy cudaMallocPitch() binary-search probing is therefore removed.
+
+ *
+
+ * RESERVED_MEM_BYTES is not subtracted here because getFreeMem()
+
+ * subtracts gpu.neededReservedMem separately.
+
+ */
+
+void recalcFreeMem(size_t elemspercolumn) {
+
+size_t mfree;
+
+size_t total;
+
+
+
+(void)elemspercolumn;
+
+
+
+HANDLE_ERROR(cudaMemGetInfo(&mfree, &total));
+
+DPRINTF(1, "Informed free memory %lu - total %lu\n", mfree, total);
+
+
+
+gpu.currentFreeMem = mfree;
+
+gpu.neededReservedMem = RESERVED_MEM_BYTES;
+
+
+
+fprintf(stdout,
+
+"Free device memory = %lu bytes (reserved margin = %lu bytes)\n",
+
+gpu.currentFreeMem,
+
+gpu.neededReservedMem);
+
+
+
+ResetError();
+
 }
+
+
 
 /*
  * Returns the amount of memory available to use by data
