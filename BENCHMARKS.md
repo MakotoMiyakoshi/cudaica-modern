@@ -26,9 +26,9 @@ The retained Stage 3 `varsort()` change reduced its separately measured region
 from 7.508 s to 6.870 s, an 8.5% reduction.
 
 Weights SHA256 was
-`ed8868049452898e51572433925e29e9dedcc8462509f4ec55a0f84dbfa26e7a` and
+`ed886fb9b5ada288a5ad9afb8a3505b890f774cd20c787a30f1a3f25e1a22e7a` and
 sphere SHA256 was
-`bfb99483cb6d7e775800458d6d9936218d48b0d1d5d97d7b81063825142e1c14`
+`bfb994bd887e7f72ac148c33e54e8eb1f58472db8644258e583d31d981456c14`
 for both compared variants. This establishes bitwise equality for this
 workload and configuration only; it is not a universal numerical-equivalence
 claim.
